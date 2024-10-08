@@ -1,0 +1,168 @@
+body {
+    font-family: Arial, sans-serif;
+    text-align: center;
+    margin: 0;
+    padding: 0;
+    background-color: #f8f9fa;
+}
+
+header {
+    padding: 20px;
+    background-color: #3a3b3d;
+    color: white;
+}
+
+.logo {
+    max-width: 200px;
+    margin: 10px 0;
+}
+
+h1 {
+    font-size: 2.5em;
+    margin: 0;
+}
+
+.slogan {
+    font-size: 1.2em;
+    margin: 10px 0;
+}
+
+.nav {
+    margin-top: 20px;
+}
+
+.nav a {
+    display: inline-block;
+    padding: 15px 30px;
+    margin: 10px;
+    background-color: #0056b3;
+    color: white;
+    text-decoration: none;
+    border-radius: 5px;
+    transition: background-color 0.3s, transform 0.3s;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.nav a:hover {
+    background-color: #1a1f24;
+    transform: translateY(-2px);
+}
+
+.button {
+    padding: 10px 15px;
+    background-color: #0056b3;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-top: 10px;
+    transition: background-color 0.3s;
+    display: inline-block;
+}
+
+footer {
+    margin-top: 20px;
+    background-color: #282a2e;
+    color: white;
+    padding: 10px 0;
+}
+
+@media (max-width: 600px) {
+    .nav a {
+        padding: 10px 20px;
+    }
+    h1 {
+        font-size: 2em;
+    }
+    .slogan {
+        font-size: 1em;
+    }
+}
+/*agendamento*/
+.horarios-disponiveis {
+    margin-top: 20px;
+    display: none; /* invisivel no inicio */
+    background-color: white;
+    border-radius: 5px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+}
+footer {
+    margin-top: 20px;
+    background-color: #282a2e;
+    color: white;
+    padding: 10px 0;
+}
+.dia-semana {
+    margin-top: 10px;
+    font-weight: bold;
+    color: #333;
+}
+label {
+    margin-top: 10px;
+    display: block;
+    font-weight: bold;
+}
+input[type="text"], input[type="date"], select {
+    width: calc(100% - 20px);
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    margin-top: 5px;
+    font-size: 16px;
+}
+/*servicos*/
+.servico {
+    background-color: white;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    margin: 10px auto;
+    padding: 15px;
+    width: 80%;
+    max-width: 400px;
+    text-align: left;
+}
+.botao-voltar {
+    display: inline-block;
+    padding: 10px 20px;
+    margin-top: 20px;
+    background-color: #0056b3;
+    color: white;
+    text-decoration: none;
+    border-radius: 5px;
+    transition: background-color 0.3s;
+}
+.botao-voltar:hover {
+    background-color: #1a1f24;
+}
+footer {
+    margin-top: 20px;
+    background-color: #282a2e;
+    color: white;
+    padding: 10px 0;
+}
+.preco {
+    font-weight: bold;
+    color: #28a745; 
+}
+.duracao {
+    color: #6c757d; 
+}
+/*contato*/
+.contato {
+    background-color: #f0f4f7;
+    margin: 0;
+    padding: 20px;
+    text-align: center;
+}
+
+.contato-info {
+    margin: 20px 0;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    background-color: rgb(255, 255, 255);
+    display: inline-block;
+    width: 80%;
+    max-width: 600px;
+}
