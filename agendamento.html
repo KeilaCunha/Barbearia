@@ -9,46 +9,82 @@
 <body>
     <header>
         <h1>Barbearia Rikelv Rocha</h1>
-        <img src="https://github.com/KeilaCunha/Barbearia/blob/main/logo.png?raw=true" alt="Logo" class="logo">
+        <img src="C:\Users\elias\logo.png" alt="Logo" class="logo">
         <p>O PONTO CERTO PARA O CORTE PERFEITO!</p>
     </header>
-
     <main>
         <section>
             <h2>Agende seu horário</h2>
-            <label for="nome">Seu Nome:</label>
-            <input type="text" id="nome" required>
-            
-            <label for="servico">Selecione o Serviço:</label>
-            <select id="servico" onchange="atualizarDuracao()">
-                <option value="">--Selecione--</option>
-                <option value="corte">Corte de Cabelo (45 minutos)</option>
-                <option value="barba">Barba (20 minutos)</option>
-                <option value="pigmentacao">Pigmentação (15 minutos)</option>
-                <option value="sobrancelha">Sobrancelha (5 minutos)</option>
-                <option value="nevou">Nevou (2h 30m)</option>
-                <option value="reflexo">Reflexo (2h 30m)</option>
-                <option value="pezinho">Pezinho (10 minutos)</option>
-            </select>
-            <div class="duracao" id="duracao" style="display:none;"></div>
-            
+            <label for="nome">Nome do Cliente:</label>
+            <input type="text" id="nome" placeholder="Digite seu nome" required>
+            <button id="btnSelecionarServicos">Selecionar Serviços</button>
+            <div id="servicosContainer" style="display:none;">
+                <label>Selecionar Serviços:</label><br>
+                <div id="servicos">
+                    <div>
+                        <input type="checkbox" id="corte" value="corte"> Corte de Cabelo (R$ 25,00) <br>
+                         45 minutos
+                    </div>
+                    <br>
+                    <div>
+                        <input type="checkbox" id="barba" value="barba"> Barba (R$ 10,00)  <br>
+                        20 minutos 
+                    </div>
+                    <br>
+                    <div>
+                        <input type="checkbox" id="pigmentacao" value="pigmentacao"> Pigmentação (R$ 15,00) <br>
+                         15 minutos
+                    </div>
+                    <br>
+                    <div>
+                        <input type="checkbox" id="sobrancelha" value="sobrancelha"> Sobrancelha (R$ 5,00) <br>
+                         5 minutos
+                    </div>
+                    <br>
+                    <div>
+                        <input type="checkbox" id="nevou" value="nevou"> Nevou (R$ 100,00) <br>
+                         2h 30m
+                    </div>
+                    <br>
+                    <div>
+                        <input type="checkbox" id="reflexo" value="reflexo"> Reflexo (R$ 80,00)  <br>
+                        2h 30m
+                    </div>
+                    <br>
+                    <div>
+                        <input type="checkbox" id="pezinho" value="pezinho"> Pezinho (R$ 10,00) <br>
+                         10 minutos
+                    </div>
+                </div>
+                <div class="duracao" id="duracao" style="display:none;"></div>
+                <div id="total" style="font-weight: bold; margin-top: 10px;"></div>
+            </div>
             <label for="data">Data:</label>
             <input type="date" id="data" required onchange="mostrarDiaSemana()">
             <div class="dia-semana" id="diaSemana"></div>
-            
             <button class="button" onclick="mostrarHorarios()">Ver horários disponíveis</button>
             <button class="button" onclick="voltar()">Voltar</button>
             <div class="horarios-disponiveis" id="horariosDisponiveis">
-                <h3>Horários Disponíveis:</h3>
+                <h3>Horários disponíveis:</h3>
                 <ul id="listaHorarios"></ul>
                 <div id="mensagemConfirmacao" style="display:none;"></div>
                 <button class="button" id="confirmarAgendamento" style="display:none;" onclick="confirmarAgendamento()">Confirmar Agendamento</button>
             </div>
         </section>
     </main>
- 
+    <br>
+    <div id="pagamentoOpcoes" style="display: none;">
+        <button id="pagamentoPix">Pagar agora via PIX</button>
+        <button id="pagamentoLocal">Pagar no local</button>
+        <div id="chavePix" style="display: none;">
+            Minha chave PIX: <br />
+            <strong>221.244.437-04</strong><br />
+            CPF - Itaú Unibanco SA<br />
+            Rikelv Ferraz da Rocha
+        </div>
+    </div>
     <footer>
-        <p>&copy; 2024 Barbearia Rikelv Rocha. "Tudo posso naquele que me fortalece."</p>
+        <p>© 2024 Barbearia Rikelv Rocha. "Tudo posso naquela época que me fortalece."</p>
     </footer>
     <script src="scripts.js"></script>
 </body>
