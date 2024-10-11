@@ -9,7 +9,7 @@
 <body>
     <header>
         <h1>Barbearia Rikelv Rocha</h1>
-        <img src="C:\Users\elias\logo.png" alt="Logo" class="logo">
+        <img src="https://github.com/KeilaCunha/Barbearia/blob/main/logo.png?raw=true" alt="Logo" class="logo">
         <p>O PONTO CERTO PARA O CORTE PERFEITO!</p>
     </header>
     <section>
@@ -39,7 +39,7 @@
 }
 
 function filtrarPorDia() {
-    const dataBusca = document.getElementById('dataBusca').value; // Formato YYYY-MM-DD
+    const dataBusca = document.getElementById('dataBusca').value; 
     const listaAgendamentos = document.getElementById('listaAgendamentos');
     listaAgendamentos.innerHTML = '';
 
@@ -50,7 +50,7 @@ function filtrarPorDia() {
     } else {
         agendamentosFiltrados.forEach(agendamento => {
             const li = document.createElement('li');
-            const dataFormatada = formatarData(agendamento.data); // Formata a data
+            const dataFormatada = formatarData(agendamento.data); 
             li.textContent = `${agendamento.nome} * ${agendamento.servicos.join(', ')} * ${dataFormatada} às ${agendamento.horario}`;
             listaAgendamentos.appendChild(li);
         });
@@ -60,7 +60,7 @@ function filtrarPorDia() {
 
          function formatarData(data) {
              const [ano, mes, dia] = data.split('-');
-             return `${dia}-${mes}-${ano}`; // Retorna no formato dd-mm-yyyy
+             return `${dia}-${mes}-${ano}`; 
         }
 
         function filtrarPorHorario() {
