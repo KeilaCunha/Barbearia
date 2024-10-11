@@ -9,28 +9,22 @@
 <body>
     <header>
         <h1>Barbearia Rikelv Rocha</h1>
-        <img src="https://github.com/KeilaCunha/Barbearia/blob/main/logo.png?raw=true" alt="Logo" class="logo"> 
+        <img src="C:\Users\elias\logo.png" alt="Logo" class="logo">
         <p>O PONTO CERTO PARA O CORTE PERFEITO!</p>
     </header>
-
     <section>
         <h2>Buscar Agendamentos</h2>
-        <label for="dataBusca">Data:</label>
+        <label for="dataBusca">Dados:</label>
         <input type="date" id="dataBusca">
-        
         <button onclick="filtrarPorDia()">Buscar por Dia</button>
-
         <label for="horarioBusca">Horário:</label>
         <input type="time" id="horarioBusca">
-        
         <button onclick="filtrarPorHorario()">Buscar por Horário</button>
     </section>
-    
     <div>
         <h2>Agendamentos Filtrados</h2>
         <ul id="listaAgendamentos"></ul>
     </div>
-
     <script>
         let agendamentos = JSON.parse(localStorage.getItem('agendamentos')) || [];
 
@@ -44,41 +38,38 @@
             const dataBusca = document.getElementById('dataBusca').value;
             const listaAgendamentos = document.getElementById('listaAgendamentos');
             listaAgendamentos.innerHTML = '';
-
             const agendamentosFiltrados = agendamentos.filter(agendamento => agendamento.data === dataBusca);
-            
             if (agendamentosFiltrados.length === 0) {
-                listaAgendamentos.innerHTML = '<li>Nenhum agendamento encontrado para esta data.</li>';
+                 listaAgendamentos.innerHTML = '<li>Nenhum agendamento encontrado para esta data.</li>';
             } else {
-                agendamentosFiltrados.forEach(agendamento => {
-                    const li = document.createElement('li');
-                    li.textContent = `${agendamento.nome} - ${agendamento.servico} - ${agendamento.data} às ${agendamento.horario}`;
-                    listaAgendamentos.appendChild(li);
-                });
-            }
-        }
+                 agendamentosFiltrados.forEach(agendamento => {
+                      const li = document.createElement('li');
+                      const dataFormatada = new Date(agendamento.data).toLocaleDateString('pt-BR'); 
+                      li.textContent = `${agendamento.nome} * ${agendamento.servicos.join(', ')} * ${dataFormatada} às ${agendamento.horario}`;
+                      listaAgendamentos.appendChild(li);
+        });
+    }
+}
+
 
         function filtrarPorHorario() {
-            const horarioBusca = document.getElementById('horarioBusca').value;
             const listaAgendamentos = document.getElementById('listaAgendamentos');
             listaAgendamentos.innerHTML = '';
-
             const agendamentosFiltrados = agendamentos.filter(agendamento => agendamento.horario === horarioBusca);
-            
             if (agendamentosFiltrados.length === 0) {
                 listaAgendamentos.innerHTML = '<li>Nenhum agendamento encontrado para este horário.</li>';
             } else {
                 agendamentosFiltrados.forEach(agendamento => {
                     const li = document.createElement('li');
-                    li.textContent = `${agendamento.nome} - ${agendamento.servico} - ${agendamento.data} às ${agendamento.horario}`;
+                    li.textContent = `${agendamento.nome} - ${agendamento.servicos} - ${agendamento.data} às ${agendamento.horario}`;
                     listaAgendamentos.appendChild(li);
                 });
             }
         }
     </script>
-         <a href="index.html" class="botao-voltar">Voltar</a>
+    <a href="index.html" class="botao-voltar">Voltar</a>
     <footer>
-        <p>&copy; 2024 Barbearia Rikelv Rocha. "Tudo posso naquele que me fortalece."</p>
+        <p>© 2024 Barbearia Rikelv Rocha. "Tudo posso naquela época que me fortalece."</p>
     </footer>
 </body>
 </html>
