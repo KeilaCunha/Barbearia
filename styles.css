@@ -1,3 +1,4 @@
+/* Estilos gerais do corpo */
 body {
     font-family: Arial, sans-serif;
     text-align: center;
@@ -6,60 +7,47 @@ body {
     background-color: #f8f9fa;
 }
 
+/* Estilos do cabeçalho */
 header {
     padding: 20px;
     background-color: #3a3b3d;
     color: white;
 }
 
+/* Logo */
 .logo {
     max-width: 200px;
     margin: 10px 0;
 }
 
+/* Títulos */
 h1 {
     font-size: 2.5em;
     margin: 0;
 }
 
-.slogan {
-    font-size: 1.2em;
-    margin: 10px 0;
-}
-
-.nav {
-    margin-top: 20px;
-}
-
-.nav a {
-    display: inline-block;
-    padding: 15px 30px;
-    margin: 10px;
-    background-color: #0056b3;
+/* Estilo dos botões */
+.button, .botao-voltar {
+    padding: 12px 20px;
+    background: linear-gradient(90deg, #0056b3, #007bff);
     color: white;
-    text-decoration: none;
-    border-radius: 5px;
-    transition: background-color 0.3s, transform 0.3s;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    margin-top: 10px;
+    transition: background 0.4s, transform 0.3s, box-shadow 0.3s;
+    display: inline-block;
+    font-size: 16px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
 
-.nav a:hover {
-    background-color: #1a1f24;
+.button:hover, .botao-voltar:hover {
+    background: linear-gradient(90deg, #007bff, #0056b3);
     transform: translateY(-2px);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
 }
 
-.button {
-    padding: 10px 15px;
-    background-color: #0056b3;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    margin-top: 10px;
-    transition: background-color 0.3s;
-    display: inline-block;
-}
-
+/* Estilo do rodapé */
 footer {
     margin-top: 20px;
     background-color: #282a2e;
@@ -67,88 +55,94 @@ footer {
     padding: 10px 0;
 }
 
-@media (max-width: 600px) {
-    .nav a {
-        padding: 10px 20px;
-    }
-    h1 {
-        font-size: 2em;
-    }
-    .slogan {
-        font-size: 1em;
-    }
-}
-/*agendamento*/
+/* Estilos para a seção de agendamento */
 .horarios-disponiveis {
     margin-top: 20px;
-    display: none; /* invisivel no inicio */
+    display: none; /* invisível no início */
     background-color: white;
     border-radius: 5px;
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
     padding: 20px;
 }
-footer {
-    margin-top: 20px;
-    background-color: #282a2e;
-    color: white;
-    padding: 10px 0;
-}
+
 .dia-semana {
     margin-top: 10px;
     font-weight: bold;
     color: #333;
 }
+
 label {
     margin-top: 10px;
     display: block;
     font-weight: bold;
 }
-input[type="text"], input[type="date"], select {
-    width: calc(100% - 20px);
+
+input[type="text"], input[type="date"] {
+    width: 100%; /* Alinha ao 100% do contêiner pai */
+    max-width: 300px; /* Define a largura máxima */
     padding: 10px;
     border: 1px solid #ccc;
     border-radius: 5px;
     margin-top: 5px;
     font-size: 16px;
+    box-sizing: border-box; /* Para garantir que o padding não aumente a largura total */
 }
-/*servicos*/
+
+#servicosContainer {
+    max-width: 900px; /* Define a largura máxima */
+    margin: 30px auto; /* Centraliza o contêiner horizontalmente */
+    padding: 0px; /* Adiciona um pouco de espaçamento interno */
+    background-color: #fff; /* Cor de fundo do contêiner */
+    border-radius: 5px; /* Cantos arredondados */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Sombra do contêiner */
+}
+
+.servicos-grid {
+    display: grid; /* Define como grid */
+    grid-template-columns: repeat(2, 200px); /* Duas colunas com largura fixa */
+    gap: 10px; /* Espaçamento entre as colunas */
+    justify-content: center; /* Centraliza o grid na página */
+    margin: 0 auto; /* Centraliza o grid na página */
+}
+
+.servico {
+    background-color: #f0f4f7; /* Cor de fundo para cada serviço */
+    border: 5px solid #ccc; /* Borda */
+    border-radius: 0px; /* Cantos arredondados */
+    padding: 0px; /* Espaçamento interno */
+    text-align: center; /* Alinha o texto ao centro */
+    width: 100%; /* A largura total do serviço dentro da grid */
+}
+/* Estilos para os serviços */
+.servicos-container {
+    display: grid;
+    grid-template-columns: repeat(2, 200px); /* Duas colunas com largura flexível */
+    gap: 10px; /* Espaçamento entre os itens */
+    justify-items: center; /* Centraliza os itens dentro de cada coluna */
+    margin: 0 auto; /* Centraliza o contêiner em relação à página */
+    max-width: 300px; /* Define uma largura máxima para o contêiner */
+}
+
 .servico {
     background-color: white;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    margin: 10px auto;
-    padding: 15px;
-    width: 80%;
-    max-width: 400px;
+    border: 3px solid #504c4c;
+    border-radius: 5px; /* Mantive um leve arredondamento */
+    padding: 10px; /* Um pouco de espaçamento interno */
     text-align: left;
+    width: 90%; /* Faz com que os serviços ocupem toda a largura da coluna */
 }
-.botao-voltar {
-    display: inline-block;
-    padding: 10px 20px;
-    margin-top: 20px;
-    background-color: #0056b3;
-    color: white;
-    text-decoration: none;
-    border-radius: 5px;
-    transition: background-color 0.3s;
-}
-.botao-voltar:hover {
-    background-color: #1a1f24;
-}
-footer {
-    margin-top: 20px;
-    background-color: #282a2e;
-    color: white;
-    padding: 10px 0;
-}
+
+/* Estilos para preços e duração */
 .preco {
     font-weight: bold;
     color: #28a745; 
 }
+
 .duracao {
     color: #6c757d; 
 }
-/*contato*/
+
+/* Estilos do contato */
 .contato {
     background-color: #f0f4f7;
     margin: 0;
@@ -165,4 +159,38 @@ footer {
     display: inline-block;
     width: 80%;
     max-width: 600px;
+}
+/*Pagina inicial*/
+/* Estilo dos botões na navegação */
+.nav a {
+    padding: 12px 20px;
+    background: linear-gradient(90deg, #0056b3, #007bff);
+    color: white;
+    text-decoration: none;
+    border-radius: 8px;
+    cursor: pointer;
+    margin: 10px;
+    transition: background 0.4s, transform 0.3s, box-shadow 0.3s;
+    display: inline-block;
+    font-size: 16px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.nav a:hover {
+    background: linear-gradient(90deg, #007bff, #0056b3);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+}
+/*chave pix*/
+.chave-pix-container {
+    margin-top: 20px;
+    padding: 15px;
+    background-color: #f0f4f7; /* Cor de fundo */
+    border: 1px solid #ccc; /* Borda */
+    border-radius: 8px; /* Cantos arredondados */
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2); /* Sombra */
+    text-align: left; /* Alinhamento do texto */
+}
+#chavePix {
+    display: none; /* Mantém oculto inicialmente */
 }
