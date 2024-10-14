@@ -15,11 +15,9 @@
     <section>
         <h2>Buscar Agendamentos</h2>
         <label for="dataBusca">Dados:</label>
-        <input type="date" id="dataBusca">
+        <input type="date" id="dataBusca"><br/>
+        <br/>
         <button onclick="filtrarPorDia()">Buscar por Dia</button>
-        <label for="horarioBusca">Horário:</label>
-        <input type="time" id="horarioBusca">
-        <button onclick="filtrarPorHorario()">Buscar por Horário</button>
     </section>
     <div>
         <h2>Agendamentos Filtrados</h2>
@@ -28,51 +26,25 @@
     <script>
         let agendamentos = JSON.parse(localStorage.getItem('agendamentos')) || [];
 
-        function adicionarAgendamento(agendamento) {
-            let agendamentos = JSON.parse(localStorage.getItem('agendamentos')) || [];
-            agendamentos.push(agendamento);
-            localStorage.setItem('agendamentos', JSON.stringify(agendamentos));
-        }
         function formatarData(data) {
-    const [ano, mes, dia] = data.split('-');
-    return `${dia}-${mes}-${ano}`; // Retorna no formato dd-mm-yyyy
-}
-
-function filtrarPorDia() {
-    const dataBusca = document.getElementById('dataBusca').value; 
-    const listaAgendamentos = document.getElementById('listaAgendamentos');
-    listaAgendamentos.innerHTML = '';
-
-    const agendamentosFiltrados = agendamentos.filter(agendamento => agendamento.data === dataBusca);
-
-    if (agendamentosFiltrados.length === 0) {
-        listaAgendamentos.innerHTML = '<li>Nenhum agendamento encontrado para esta data.</li>';
-    } else {
-        agendamentosFiltrados.forEach(agendamento => {
-            const li = document.createElement('li');
-            const dataFormatada = formatarData(agendamento.data); 
-            li.textContent = `${agendamento.nome} * ${agendamento.servicos.join(', ')} * ${dataFormatada} às ${agendamento.horario}`;
-            listaAgendamentos.appendChild(li);
-        });
-    }
-}
-
-
-         function formatarData(data) {
-             const [ano, mes, dia] = data.split('-');
-             return `${dia}-${mes}-${ano}`; 
+            const [ano, mes, dia] = data.split('-');
+            return `${dia}-${mes}-${ano}`; // Retorna no formato dd-mm-yyyy
         }
 
-        function filtrarPorHorario() {
+        function filtrarPorDia() {
+            const dataBusca = document.getElementById('dataBusca').value; // Formato YYYY-MM-DD
             const listaAgendamentos = document.getElementById('listaAgendamentos');
             listaAgendamentos.innerHTML = '';
-            const agendamentosFiltrados = agendamentos.filter(agendamento => agendamento.horario === horarioBusca);
+
+            const agendamentosFiltrados = agendamentos.filter(agendamento => agendamento.data === dataBusca);
+
             if (agendamentosFiltrados.length === 0) {
-                listaAgendamentos.innerHTML = '<li>Nenhum agendamento encontrado para este horário.</li>';
+                listaAgendamentos.innerHTML = '<li>Nenhum agendamento encontrado para esta data.</li>';
             } else {
                 agendamentosFiltrados.forEach(agendamento => {
                     const li = document.createElement('li');
-                    li.textContent = `${agendamento.nome} - ${agendamento.servicos} - ${agendamento.data} às ${agendamento.horario}`;
+                    const dataFormatada = formatarData(agendamento.data); // Formata a data
+                    li.textContent = `${agendamento.nome} * ${agendamento.servicos.join(', ')} * ${dataFormatada} às ${agendamento.horario}`;
                     listaAgendamentos.appendChild(li);
                 });
             }
