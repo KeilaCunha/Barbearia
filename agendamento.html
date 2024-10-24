@@ -5,7 +5,55 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Agendamento</title>
     <link rel="stylesheet" href="styles.css">
+    <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js"></script>
     <script src="scripts.js" defer></script>
+    <script>
+        // Configuração do Firebase
+        const firebaseConfig = {
+            apiKey: "AIzaSyDhUxLwAiwOdaYf_wQTtPnwtuACsPdRbr0",
+            authDomain: "barbearia-rikelv-rocha.firebaseapp.com",
+            projectId: "barbearia-rikelv-rocha",
+            storageBucket: "barbearia-rikelv-rocha.appspot.com",
+            messagingSenderId: "507858686874",
+            appId: "1:507858686874:web:ba9ceaebd03d7140a86023",
+        };
+
+        // Inicializa o Firebase
+        const app = firebase.initializeApp(firebaseConfig);
+        const db = firebase.firestore();
+
+        // Função para adicionar um agendamento
+        function adicionarAgendamento(nome, data, servicos, horario) {
+            db.collection("agendamentos").add({
+                nome: nome,
+                data: data,
+                servicos: servicos,
+                horario: horario
+            })
+            .then((docRef) => {
+                console.log("Agendamento adicionado com ID: ", docRef.id);
+                alert("Agendamento confirmado com sucesso!");
+            })
+            .catch((error) => {
+                console.error("Erro ao adicionar agendamento: ", error);
+            });
+        }
+
+        function confirmarAgendamento() {
+            const nome = document.getElementById("nome").value;
+            const data = document.getElementById("data").value;
+
+            const servicos = Array.from(document.querySelectorAll('input[type="checkbox"]:checked')).map(checkbox => checkbox.value);
+            const horario = document.getElementById("horariosDisponiveis").style.display !== "none" ? "Selecionado" : "Não selecionado"; 
+
+            if (nome && data && servicos.length > 0) {
+                adicionarAgendamento(nome, data, servicos, horario);
+            } else {
+                alert("Por favor, preencha todos os campos.");
+            }
+        }
+    </script>
 </head>
 <body>
     <header>
@@ -79,8 +127,7 @@
         </div>
     </div>
     <footer>
-        <p>© 2024 Barbearia Rikelv Rocha. "Tudo posso naquela época que me fortalece."</p>
+        <p>© 2024 Barbearia Rikelv Rocha. "Tudo posso naquEle que me fortalece."</p>
     </footer>
-    </script>
 </body>
 </html>
