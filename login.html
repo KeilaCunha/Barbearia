@@ -1,46 +1,81 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Login - Barbearia Rikelv Rocha</title>
-    <link rel="stylesheet" href="styles.css">
-</head>
-<body>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
     <header>
-        <h1>Área do Barbeiro</h1>
+      <h1>Área do Barbeiro</h1>
     </header>
-    
+
     <main>
-        <form id="loginForm">
-            <label for="senha">Senha:</label>
-            <input type="password" id="senha" required>
-            <button type="submit">Entrar</button>
-        </form>
-        <div id="mensagemErro" style="color: red; display: none;"></div>
+      <form id="loginForm">
+        <label for="email">Email:</label>
+        <input type="email" id="email" required />
+        <label for="senha">Senha:</label>
+        <input type="password" id="senha" required />
+        <button type="submit">Entrar</button>
+      </form>
+      <div id="mensagemErro" style="color: red; display: none"></div>
     </main>
 
-    <script>
-        const senhaCorreta = '1712'; 
+    <script type="module">
+      // Importa as funções necessárias do SDK do Firebase
+      import { initializeApp } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-app.js";
+      import {
+        getAuth,
+        signInWithEmailAndPassword,
+      } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js";
 
-        document.getElementById('loginForm').addEventListener('submit', function(event) {
-            event.preventDefault(); // Impede o envio do formulário
+      // Configuração do Firebase
+      const firebaseConfig = {
+        apiKey: "AIzaSyDhUxLwAiwOdaYf_wQTtPnwtuACsPdRbr0",
+        authDomain: "barbearia-rikelv-rocha.firebaseapp.com",
+        projectId: "barbearia-rikelv-rocha",
+        storageBucket: "barbearia-rikelv-rocha.appspot.com",
+        messagingSenderId: "507858686874",
+        appId: "1:507858686874:web:ba9ceaebd03d7140a86023",
+        measurementId: "G-WW9DG50RLR",
+      };
 
-            const senha = document.getElementById('senha').value;
+      // Inicializa o Firebase
+      const app = initializeApp(firebaseConfig);
+      const auth = getAuth(app); // Inicializa o serviço de autenticação
 
-            if (senha === senhaCorreta) {
-                // Se a senha estiver correta, armazene o estado de autenticação
-                localStorage.setItem('autenticado', 'true');
-                // Redireciona para a página de buscar agendamentos
-                window.location.href = 'buscaragendamentos.html'; 
-            } else {
-                // Se a senha estiver incorreta, exiba uma mensagem de erro
-                const mensagemErro = document.getElementById('mensagemErro');
-                mensagemErro.textContent = 'Senha incorreta! Tente novamente.';
-                mensagemErro.style.display = 'block';
-            }
+      document
+        .getElementById("loginForm")
+        .addEventListener("submit", function (event) {
+          event.preventDefault(); // Impede o envio do formulário
+
+          const email = document.getElementById("email").value;
+          const senha = document.getElementById("senha").value;
+
+          // Faz o login com email e senha
+          signInWithEmailAndPassword(auth, email, senha)
+            .then((userCredential) => {
+              // Login bem-sucedido
+              const user = userCredential.user;
+              console.log("Usuário logado:", user);
+              // Armazena o estado de autenticação no localStorage
+              localStorage.setItem("autenticado", "true");
+              // Redireciona para a página de buscar agendamentos
+              window.location.href = "buscaragendamentos.html";
+            })
+            .catch((error) => {
+              const errorCode = error.code;
+              const errorMessage = error.message;
+              console.error("Erro ao fazer login:", errorCode, errorMessage);
+              // Exibe a mensagem de erro
+              const mensagemErro = document.getElementById("mensagemErro");
+              mensagemErro.textContent =
+                "Senha ou email incorretos! Tente novamente.";
+              mensagemErro.style.display = "block";
+            });
         });
     </script>
     <a href="index.html" class="botao-voltar">Voltar</a>
-</body>
+  </body>
 </html>
