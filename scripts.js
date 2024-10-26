@@ -23,173 +23,110 @@ function calcularTotal() {
     let total = 0;
     let duracao = 0;
     const servicosSelecionados = document.querySelectorAll('input[type="checkbox"]:checked');
-
     servicosSelecionados.forEach(servico => {
         total += servicos[servico.value].preco;
-
         const duracaoServico = servicos[servico.value].duracao;
-        const minutos = converterDuracaoParaMinutos(duracaoServico);
+        duracao += converterDuracaoParaMinutos(duracaoServico);
+    });
+    document.getElementById('total').innerText = `Total: R$ ${total.toFixed(2)}`;
+    document.getElementById('duracao').innerText = `Duração total: ${converterMinutosParaDuracao(duracao)}`;
+}
 
-        // Verifica se minutos não é NaN antes de somar
-        if (!isNaN(minutos) && minutos > 0) {
-            duracao += minutos;
+// Função para converter duração para minutos
+function converterDuracaoParaMinutos(duracao) {
+    const partes = duracao.split(' ');
+    let minutos = 0;
+    partes.forEach(parte => {
+        if (parte.includes('h')) {
+            minutos += parseInt(parte) * 60;
+        } else if (parte.includes('m')) {
+            minutos += parseInt(parte);
         }
     });
-
-    // Exibe o total
-    document.getElementById('total').innerText = `Total: R$ ${total.toFixed(2)}`;
-    // Exibe a duração total
-    document.getElementById('duracao').innerText = `Duração Total: ${converterMinutosParaDuracao(duracao)}`;
+    return minutos;
 }
 
-// Função para converter a duração para minutos
-function converterDuracaoParaMinutos(duracao) {
-    let minutos = 0;
-
-    // Usar regex para encontrar horas e minutos
-    const regex = /(\d+)\s*(h|m|min)/g;
-    let match;
-
-    // Encontrar todas as ocorrências de horas e minutos
-    while ((match = regex.exec(duracao)) !== null) {
-        const valor = parseInt(match[1]);
-        if (match[2].startsWith('h')) {
-            minutos += valor * 60; // Converte horas para minutos
-        } else {
-            minutos += valor; // Adiciona minutos
-        }
-    }
-
-    return minutos; // Retorna a soma total em minutos
-}
-
-// Função para converter minutos de volta para o formato de duração
+// Função para converter minutos para a string de duração
 function converterMinutosParaDuracao(minutos) {
     const horas = Math.floor(minutos / 60);
     const mins = minutos % 60;
-    return `${horas > 0 ? horas + 'h ' : ''}${mins}m`;
-}
-
-// Adicione um evento de mudança aos checkboxes
-document.addEventListener('DOMContentLoaded', () => {
-    document.querySelectorAll('input[type="checkbox"]').forEach(checkbox => {
-        checkbox.addEventListener('change', calcularTotal);
-    });
-});
-
-function mostrarDiaSemana() {
-    const dataInput = document.getElementById('data').value;
-    const diaSemanaDiv = document.getElementById('diaSemana');
-
-    if (dataInput) {
-        // Cria a data no formato correto
-        const data = new Date(dataInput + 'T00:00:00'); // Adiciona a parte do tempo para evitar problemas de fuso horário
-        const diasDaSemana = ['Domingo', 'Segunda', 'Terça', 'Quarta', 'Quinta', 'Sexta', 'Sábado'];
-        diaSemanaDiv.textContent = `Data: ${data.toLocaleDateString('pt-BR')} - Dia da semana: ${diasDaSemana[data.getUTCDay()]}`;
-    } else {
-        diaSemanaDiv.textContent = '';
-    }
+    return `${horas > 0 ? `${horas}h ` : ''}${mins > 0 ? `${mins}m` : ''}`.trim();
 }
 
 function mostrarHorarios() {
-    const dataInput = document.getElementById('data').value;
-    const data = new Date(dataInput + 'T00:00:00');
-    const diaDaSemana = data.getUTCDay();
+    const dataSelecionada = document.getElementById("data").value;
 
-    const horariosDisponiveis = horariosPorDia[diaDaSemana];
-    const listaHorarios = document.getElementById('listaHorarios');
-    
-    listaHorarios.innerHTML = ''; // Limpa horários anteriores
+    if (!dataSelecionada) {
+        alert("Por favor, selecione uma data.");
+        return;
+    }
 
-    // Recupera agendamentos do localStorage
-    const agendamentos = JSON.parse(localStorage.getItem('agendamentos')) || [];
-    const horariosOcupados = agendamentos
-        .filter(agendamento => agendamento.data === dataInput) // Filtra pelos agendamentos do dia
-        .flatMap(agendamento => agendamento.horario); // Extrai os horários
+    const diaSelecionado = new Date(dataSelecionada);
+    const diaSemana = diaSelecionado.getDay();
+    const horariosDisponiveis = [...horariosPorDia[diaSemana]]; // Copia os horários disponíveis
 
-    const horariosFiltrados = horariosDisponiveis.filter(horario => !horariosOcupados.includes(horario));
+    // Atualiza a lista de horários disponíveis
+    const listaHorarios = document.getElementById("listaHorarios");
+    listaHorarios.innerHTML = ""; // Limpa a lista anterior
 
-    if (horariosFiltrados.length > 0) {
-        horariosFiltrados.forEach(horario => {
-            const li = document.createElement('li');
-            li.innerHTML = `<input type="checkbox" value="${horario}"> ${horario}`;
-            listaHorarios.appendChild(li);
+    // Adiciona os horários disponíveis à lista
+    horariosDisponiveis.forEach(horario => {
+        const li = document.createElement("li");
+        li.innerHTML = `<input type="checkbox" value="${horario}" onchange="calcularTotal()"> ${horario}`;
+        listaHorarios.appendChild(li);
+    });
+
+
+    db.collection("agendamentos")
+        .where("data", "==", dataSelecionada)
+        .get()
+        .then((querySnapshot) => {
+            querySnapshot.forEach((doc) => {
+                const agendamento = doc.data();
+                const horariosReservados = agendamento.horario.split(', '); // Converte a string de horários para um array
+
+                // Remove os horários reservados
+                horariosReservados.forEach((horario) => {
+                    const index = horariosDisponiveis.indexOf(horario);
+                    if (index > -1) {
+                        horariosDisponiveis.splice(index, 1);
+                    }
+                });
+            });
+
+            // Atualiza a lista com horários disponíveis após reservas
+            listaHorarios.innerHTML = ""; // Limpa a lista anterior
+            horariosDisponiveis.forEach(horario => {
+                const li = document.createElement("li");
+                li.innerHTML = `<input type="checkbox" value="${horario}" onchange="calcularTotal()"> ${horario}`;
+                listaHorarios.appendChild(li);
+            });
+
+            document.getElementById("confirmarAgendamento").style.display = "block";
+        })
+        .catch((error) => {
+            console.error("Erro ao buscar agendamentos: ", error);
         });
-
-        document.getElementById('horariosDisponiveis').style.display = 'block';
-        document.getElementById('confirmarAgendamento').style.display = 'block';
-    } else {
-        listaHorarios.innerHTML = '<li>Sem horários disponíveis para este dia.</li>';
-        document.getElementById('horariosDisponiveis').style.display = 'block';
-        document.getElementById('confirmarAgendamento').style.display = 'none';
-    }
 }
 
-function voltar() {
-    document.getElementById('mainContent').style.display = 'none';
-    document.getElementById('pagamentoOpcoes').style.display = 'none';
+
+// Adiciona listener para atualizações em tempo real
+function inicializarListenerDeAgendamentos() {
+    db.collection("agendamentos")
+        .onSnapshot((snapshot) => {
+            snapshot.docChanges().forEach((change) => {
+                if (change.type === "added" || change.type === "modified") {
+                    mostrarHorarios(); // Atualiza os horários disponíveis quando um novo agendamento é adicionado ou modificado
+                }
+            });
+        });
 }
 
-function confirmarAgendamento() {
-    const nome = document.getElementById('nome').value;
-    const data = document.getElementById('data').value;
+// Chama a função para inicializar o listener
+inicializarListenerDeAgendamentos();
 
-    // Pega os serviços selecionados
-    const servicosSelecionados = Array.from(document.querySelectorAll('input[type="checkbox"]:checked'))
-        .filter(checkbox => servicos[checkbox.value])
-        .map(checkbox => checkbox.parentNode.textContent.trim().split(" (")[0])
-        .join(', ');
-
-    // Pega os horários selecionados
-    const horariosSelecionados = Array.from(document.querySelectorAll('#listaHorarios input[type="checkbox"]:checked'))
-        .map(checkbox => checkbox.value)
-        .join(', ');
-
-    // Verifica se há serviços e horários selecionados
-    if (servicosSelecionados.length === 0) {
-        alert("Por favor, selecione pelo menos um serviço.");
-        return;
-    }
-    
-    if (horariosSelecionados.length === 0) {
-        alert("Por favor, selecione pelo menos um horário.");
-        return;
-    }
-
-    // Exibe a mensagem de confirmação
-    document.getElementById('mensagemConfirmacao').innerText = 
-        `Agendamento confirmado para ${nome} no dia ${data} com os serviços: ${servicosSelecionados}. Horários selecionados: ${horariosSelecionados}.`;
-    document.getElementById('mensagemConfirmacao').style.display = 'block';
-
-
-    // Exibe opções de pagamento
-    document.getElementById('pagamentoOpcoes').style.display = 'block';
-}
-function mostrarChavePix() {
-    document.getElementById('chavePix').style.display = 'block';
-    
-    const mensagemDiv = document.getElementById('mensagemPagamento');
-    mensagemDiv.innerText = "Obrigado pelo seu agendamento! Você escolheu pagar via PIX.";
-    mensagemDiv.style.display = 'block'; // Exibe a mensagem
-}
-function pagarNoLocal() {
-    const mensagemDiv = document.getElementById('mensagemPagamento');
-    mensagemDiv.innerText = "Obrigado pelo seu agendamento! Você escolheu pagar no local.";
-    mensagemDiv.style.display = 'block'; // Exibe a mensagem
-}
-// Adiciona o agendamento ao localStorage
-const agendamento = {
-    nome,
-    data,
-    servicos: servicosSelecionados.split(', '),
-    horario: horariosSelecionados.split(', ') // Armazena como array
-};
-
-adicionarAgendamento(agendamento); // Chama a função para armazenar
-
-// Função para adicionar agendamentos ao localStorage
-function adicionarAgendamento(agendamento) {
-let agendamentos = JSON.parse(localStorage.getItem('agendamentos')) || [];
-agendamentos.push(agendamento);
-localStorage.setItem('agendamentos', JSON.stringify(agendamentos));
-}
+// Adicione um evento para chamar a função quando a data for alterada
+document.getElementById("data").addEventListener("change", function() {
+    mostrarDiaSemana(); // Mostra o dia da semana ao selecionar uma data
+    mostrarHorarios(); // Mostra os horários disponíveis ao selecionar uma data
+});
