@@ -45,10 +45,12 @@
             const data = document.getElementById("data").value;
 
             const servicos = Array.from(document.querySelectorAll('input[type="checkbox"]:checked')).map(checkbox => checkbox.value);
-            const horario = document.getElementById("horariosDisponiveis").style.display !== "none" ? "Selecionado" : "Não selecionado"; 
+            const horariosSelecionados = Array.from(document.querySelectorAll('#listaHorarios input[type="checkbox"]:checked'))
+                .map(checkbox => checkbox.value)
+                .join(', ');
 
-            if (nome && data && servicos.length > 0) {
-                adicionarAgendamento(nome, data, servicos, horario);
+            if (nome && data && servicos.length > 0 && horariosSelecionados) {
+                adicionarAgendamento(nome, data, servicos, horariosSelecionados);
             } else {
                 alert("Por favor, preencha todos os campos.");
             }
@@ -102,7 +104,7 @@
                 <div id="duracao" style="font-weight: bold; margin-top: 10px;"></div>
             </div>
             <label for="data">Data:</label>
-            <input type="date" id="data" required onchange="mostrarDiaSemana()">
+            <input type="date" id="data" required onchange="mostrarDiaSemana(); mostrarHorarios();">
             <div class="dia-semana" id="diaSemana"></div>
             <button class="button" onclick="mostrarHorarios()">Ver horários disponíveis</button>
             <a href="index.html" class="botao-voltar">Voltar</a>
@@ -126,8 +128,15 @@
             Rikelv Ferraz da Rocha
         </div>
     </div>
-    <footer>
-        <p>© 2024 Barbearia Rikelv Rocha. "Tudo posso naquEle que me fortalece."</p>
-    </footer>
+</nav>
+<p style="position: absolute; left: 3px; margin: 0; color: #727170; font-size: 15px;">Desenvolvido por:<br/> Keila Cunha<br/>Tel: (22)98124-1146</p>
+ <br/>
+ <br/>
+<footer style="padding: 20px; background-color: #333; color: #ffffff; display: flex; justify-content: center; position: relative;">
+    <p style="margin: 0; text-align: center;">&copy; 2024 Barbearia Rikelv Rocha. "Tudo posso naquEle que me fortalece."</p>
+</footer>    
+</body>
+</html>
+    <script src="scripts.js"></script>
 </body>
 </html>
