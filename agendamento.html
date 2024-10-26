@@ -1,142 +1,166 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Agendamento</title>
-    <link rel="stylesheet" href="styles.css">
-    <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-app.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js"></script>
-    <script src="scripts.js" defer></script>
-    <script>
-        // Configuração do Firebase
-        const firebaseConfig = {
-            apiKey: "AIzaSyDhUxLwAiwOdaYf_wQTtPnwtuACsPdRbr0",
-            authDomain: "barbearia-rikelv-rocha.firebaseapp.com",
-            projectId: "barbearia-rikelv-rocha",
-            storageBucket: "barbearia-rikelv-rocha.appspot.com",
-            messagingSenderId: "507858686874",
-            appId: "1:507858686874:web:ba9ceaebd03d7140a86023",
-        };
+    <link rel="stylesheet" href="styles.css" />
 
-        // Inicializa o Firebase
-        const app = firebase.initializeApp(firebaseConfig);
-        const db = firebase.firestore();
+    <script type="module">
+      // Importa Firebase
+      import { initializeApp } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-app.js";
+      import {
+        getFirestore,
+        collection,
+        addDoc,
+      } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js";
 
-        // Função para adicionar um agendamento
-        function adicionarAgendamento(nome, data, servicos, horario) {
-            db.collection("agendamentos").add({
-                nome: nome,
-                data: data,
-                servicos: servicos,
-                horario: horario
-            })
-            .then((docRef) => {
-                console.log("Agendamento adicionado com ID: ", docRef.id);
-                alert("Agendamento confirmado com sucesso!");
-            })
-            .catch((error) => {
-                console.error("Erro ao adicionar agendamento: ", error);
-            });
+      // Configuração do Firebase
+      const firebaseConfig = {
+        apiKey: "AIzaSyDhUxLwAiwOdaYf_wQTtPnwtuACsPdRbr0",
+        authDomain: "barbearia-rikelv-rocha.firebaseapp.com",
+        projectId: "barbearia-rikelv-rocha",
+        storageBucket: "barbearia-rikelv-rocha.appspot.com",
+        messagingSenderId: "507858686874",
+        appId: "1:507858686874:web:ba9ceaebd03d7140a86023",
+      };
+
+      // Inicializa o Firebase
+      const app = initializeApp(firebaseConfig);
+      const db = getFirestore(app);
+
+      // Função para adicionar um agendamento
+      window.adicionarAgendamento = async function (
+        nome,
+        data,
+        servicos,
+        horario
+      ) {
+        try {
+          const docRef = await addDoc(collection(db, "agendamentos"), {
+            nome: nome,
+            data: data,
+            servicos: servicos,
+            horario: 14,
+          });
+          console.log("Agendamento adicionado com ID: ", docRef.id);
+          alert("Agendamento confirmado com sucesso!");
+        } catch (error) {
+          console.error("Erro ao adicionar agendamento: ", error);
         }
+      };
 
-        function confirmarAgendamento() {
-            const nome = document.getElementById("nome").value;
-            const data = document.getElementById("data").value;
+      window.confirmarAgendamento = function () {
+        const nome = document.getElementById("nome").value;
+        const data = document.getElementById("data").value;
+        const horario = 14;
 
-            const servicos = Array.from(document.querySelectorAll('input[type="checkbox"]:checked')).map(checkbox => checkbox.value);
-            const horariosSelecionados = Array.from(document.querySelectorAll('#listaHorarios input[type="checkbox"]:checked'))
-                .map(checkbox => checkbox.value)
-                .join(', ');
+        const servicos = Array.from(
+          document.querySelectorAll('input[type="checkbox"]:checked')
+        ).map((checkbox) => checkbox.value);
+        const horariosSelecionados = Array.from(
+          document.querySelectorAll(
+            '#listaHorarios input[type="checkbox"]:checked'
+          )
+        )
+          .map((checkbox) => checkbox.value)
+          .join(", ");
 
-            if (nome && data && servicos.length > 0 && horariosSelecionados) {
-                adicionarAgendamento(nome, data, servicos, horariosSelecionados);
-            } else {
-                alert("Por favor, preencha todos os campos.");
-            }
+        if (nome && data && servicos.length > 0 && horario) {
+          adicionarAgendamento(nome, data, servicos, horario);
+        } else {
+          alert("Por favor, preencha todos os campos.");
         }
+      };
     </script>
-</head>
-<body>
+  </head>
+  <body>
     <header>
-        <h1>Barbearia Rikelv Rocha</h1>
-        <img src="https://github.com/KeilaCunha/Barbearia/blob/main/logo.png?raw=true" alt="Logo" class="logo">
-        <p>O PONTO CERTO PARA O CORTE PERFEITO!</p>
+      <h1>Barbearia Rikelv Rocha</h1>
+      <img
+        src="https://github.com/KeilaCunha/Barbearia/blob/main/logo.png?raw=true"
+        alt="Logo"
+        class="logo"
+      />
+      <p>O PONTO CERTO PARA O CORTE PERFEITO!</p>
     </header>
     <main id="mainContent">
-        <section>
-            <h2>Agende seu horário</h2>
-            <label for="nome">Nome do Cliente:</label>
-            <input type="text" id="nome" placeholder="Digite seu nome" required><br/>
-            <div id="servicosContainer">
-                <h3>Selecionar Serviços:</h3>
-                <div id="servicos" class="servicos-grid">
-                    <div class="servico">
-                        <input type="checkbox" id="corte" value="corte"> Corte de Cabelo <br>
-                        (R$ 25,00) - 45 minutos
-                    </div>
-                    <div class="servico">
-                        <input type="checkbox" id="barba" value="barba"> Barba <br>
-                        (R$ 10,00) - 20 minutos
-                    </div>
-                    <div class="servico">
-                        <input type="checkbox" id="pigmentacao" value="pigmentacao"> Pigmentação <br>
-                        (R$ 15,00) - 15 minutos
-                    </div>
-                    <div class="servico">
-                        <input type="checkbox" id="sobrancelha" value="sobrancelha"> Sobrancelha <br>
-                        (R$ 5,00) - 5 minutos
-                    </div>
-                    <div class="servico">
-                        <input type="checkbox" id="nevou" value="nevou"> Nevou <br>
-                        (R$ 100,00) - 2h 30m
-                    </div>
-                    <div class="servico">
-                        <input type="checkbox" id="reflexo" value="reflexo"> Reflexo <br>
-                        (R$ 80,00) - 2h 30m
-                    </div>
-                    <div class="servico">
-                        <input type="checkbox" id="pezinho" value="pezinho"> Pezinho <br>
-                        (R$ 10,00) - 10 minutos
-                    </div>
-                </div>            
-                <div id="total" style="font-weight: bold; margin-top: 10px;"></div>
-                <div id="duracao" style="font-weight: bold; margin-top: 10px;"></div>
+      <section>
+        <h2>Agende seu horário</h2>
+        <label for="nome">Nome do Cliente:</label>
+        <input
+          type="text"
+          id="nome"
+          placeholder="Digite seu nome"
+          required
+        /><br />
+        <div id="servicosContainer">
+          <h3>Selecionar Serviços:</h3>
+          <div id="servicos" class="servicos-grid">
+            <div class="servico">
+              <input type="checkbox" id="corte" value="corte" /> Corte de Cabelo
+              <br />
+              (R$ 25,00) - 45 minutos
             </div>
-            <label for="data">Data:</label>
-            <input type="date" id="data" required onchange="mostrarDiaSemana(); mostrarHorarios();">
-            <div class="dia-semana" id="diaSemana"></div>
-            <button class="button" onclick="mostrarHorarios()">Ver horários disponíveis</button>
-            <a href="index.html" class="botao-voltar">Voltar</a>
-            <div class="horarios-disponiveis" id="horariosDisponiveis">
-                <h3>Horários disponíveis:</h3>
-                <ul id="listaHorarios"></ul>
-                <div id="mensagemConfirmacao" style="display:none;"></div>
-                <button class="button" id="confirmarAgendamento" style="display:none;" onclick="confirmarAgendamento()">Confirmar Agendamento</button>
+            <div class="servico">
+              <input type="checkbox" id="barba" value="barba" /> Barba <br />
+              (R$ 10,00) - 20 minutos
             </div>
-        </section>
-    </main>
-    <br>
-    <div id="pagamentoOpcoes" style="display: none;">
-        <button id="pagamentoPix" class="button" onclick="mostrarChavePix()">Pagar agora via PIX</button>
-        <button id="pagamentoLocal" class="button" onclick="pagarNoLocal()">Pagar no local</button>
-        <div id="mensagemPagamento" style="display: none; margin-top: 20px; font-weight: bold; color: #28a745;"></div>
-        <div id="chavePix" style="display: none;" class="chave-pix-container">
-            <h3>Minha chave PIX:</h3>
-            <strong>221.244.437-04</strong><br />
-            CPF - Itaú Unibanco S.A<br />
-            Rikelv Ferraz da Rocha
+            <div class="servico">
+              <input type="checkbox" id="pigmentacao" value="pigmentacao" />
+              Pigmentação <br />
+              (R$ 15,00) - 15 minutos
+            </div>
+            <div class="servico">
+              <input type="checkbox" id="sobrancelha" value="sobrancelha" />
+              Sobrancelha <br />
+              (R$ 5,00) - 5 minutos
+            </div>
+            <div class="servico">
+              <input type="checkbox" id="nevou" value="nevou" /> Nevou <br />
+              (R$ 100,00) - 2h 30m
+            </div>
+            <div class="servico">
+              <input type="checkbox" id="reflexo" value="reflexo" /> Reflexo
+              <br />
+              (R$ 80,00) - 2h 30m
+            </div>
+            <div class="servico">
+              <input type="checkbox" id="pezinho" value="pezinho" /> Pezinho
+              <br />
+              (R$ 10,00) - 10 minutos
+            </div>
+          </div>
+          <div id="total" style="font-weight: bold; margin-top: 10px"></div>
+          <div id="duracao" style="font-weight: bold; margin-top: 10px"></div>
         </div>
-    </div>
-</nav>
-<p style="position: absolute; left: 3px; margin: 0; color: #727170; font-size: 15px;">Desenvolvido por:<br/> Keila Cunha<br/>Tel: (22)98124-1146</p>
- <br/>
- <br/>
-<footer style="padding: 20px; background-color: #333; color: #ffffff; display: flex; justify-content: center; position: relative;">
-    <p style="margin: 0; text-align: center;">&copy; 2024 Barbearia Rikelv Rocha. "Tudo posso naquEle que me fortalece."</p>
-</footer>    
-</body>
-</html>
-    <script src="scripts.js"></script>
-</body>
+        <label for="data">Data:</label>
+        <input type="date" id="data" required />
+        <div class="horarios-disponiveis" id="horariosDisponiveis">
+          <h3>Horários disponíveis:</h3>
+          <ul id="listaHorarios">
+            <li>15</li>
+          </ul>
+          <div id="mensagemConfirmacao"></div>
+          <button
+            class="button"
+            id="confirmarAgendamento"
+            onclick="confirmarAgendamento()"
+          >
+            Confirmar Agendamento
+          </button>
+        </div>
+        <button class="button" onclick="confirmarAgendamento()">
+          Confirmar Agendamento
+        </button>
+        <a href="index.html" class="botao-voltar">Voltar</a>
+      </section>
+    </main>
+    <footer>
+      <p>
+        &copy; 2024 Barbearia Rikelv Rocha. "Tudo posso naquEle que me
+        fortalece."
+      </p>
+    </footer>
+  </body>
 </html>
